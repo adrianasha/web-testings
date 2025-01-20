@@ -4,109 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Website</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-      body {
-          font-family: Arial, sans-serif;
-          background-color: #f4f4f4;
-          margin: 0;
-          padding: 0;
-      }
-      
-      .container {
-          width: 80%;
-          margin: 0 auto;
-          padding: 20px;
-          background-color: #fff;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      
-      h1 {
-          text-align: center;
-          color: #333;
-      }
-      
-      .section {
-          margin-bottom: 40px;
-      }
-      
-      h2 {
-          color: #555;
-          border-bottom: 2px solid #ddd;
-          padding-bottom: 10px;
-      }
-      
-      #recipe-list, #edited-recipes {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 20px;
-      }
-      
-      .recipe {
-          background-color: #fafafa;
-          padding: 20px;
-          border: 1px solid #ddd;
-          width: calc(50% - 20px);
-          box-sizing: border-box;
-      }
-      
-      .recipe h3 {
-          margin-top: 0;
-      }
-      
-      .recipe p {
-          color: #666;
-      }
-      
-      button {
-          background-color: #3498db;
-          color: #fff;
-          border: none;
-          padding: 10px 20px;
-          cursor: pointer;
-          border-radius: 5px;
-      }
-      
-      button:hover {
-          background-color: #2980b9;
-      }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f9f7fa;
+            margin: 0;
+            padding: 0;
+            color: #272222;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #DBB5B5;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: white;
+            background: linear-gradient(135deg, #f06, #48c6ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 1.9em;
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .search-container {
+            display: inline-block;
+            margin-left: 20px;
+            width: 89%;
+        }
+
+        .search-container input {
+            padding: 8px 0;
+            font-size: 1.1em;
+            border: none;
+            border-bottom: 2px solid #2980b9;
+            background: transparent;
+            width: 100%;
+            outline: none;
+        }
+
+        .search-container input:focus {
+            border-bottom: 2px solid #3498db;
+        }
+
+        #recipe-list {
+            display: block;
+        }
+
+        .recipe {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e1e1e1;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        .recipe:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background-color: #f0f3f5;
+        }
+
+        .recipe h3 {
+            margin-top: 0;
+            font-size: 1.6em;
+            color: #2c3e50;
+            text-transform: capitalize;
+        }
+
+        .recipe p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .recipe img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal img {
+            width: 100%;
+            height: 50%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            transition: color 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .recipe {
+                width: 100%;
+            }
+
+            .search-container input {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Recipe Website</h1>
+        <h1>Cook Your Style</h1>
         
         <div class="section">
             <h2>Recipes</h2>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search Recipes..." onkeyup="searchRecipes()">
+            </div>
             <div id="recipe-list">
                 <div class="recipe" id="recipe-1">
+                    <img src="https://bakingamoment.com/wp-content/uploads/2024/02/IMG_0203-bolognese.jpg" alt="Spaghetti Bolognese" onclick="openModal(1)">
                     <h3>Spaghetti Bolognese</h3>
-                    <p>A classic Italian pasta dish with rich meat sauce.</p>
-                    <button onclick="editRecipe('recipe-1')">Edit</button>
+                    <p>A classic Italian pasta dish with a rich meat sauce. Perfect for family dinners or special occasions.</p>
                 </div>
                 <div class="recipe" id="recipe-2">
+                    <img src="https://www.foodandwine.com/thmb/8YAIANQTZnGpVWj2XgY0dYH1V4I=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/spicy-chicken-curry-FT-RECIPE0321-58f84fdf7b484e7f86894203eb7834e7.jpg" alt="Chicken Curry" onclick="openModal(2)">
                     <h3>Chicken Curry</h3>
-                    <p>A spicy and flavorful chicken curry.</p>
-                    <button onclick="editRecipe('recipe-2')">Edit</button>
+                    <p>A spicy and flavorful chicken curry, with a blend of aromatic spices and tender chicken pieces.</p>
                 </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Edited Recipes</h2>
-            <div id="edited-recipes">
-                <!-- Edited recipes will appear here -->
-            </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Recipe Image">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDescription"></p>
         </div>
     </div>
 
     <script>
-        function editRecipe(recipeId) {
-            const recipe = document.getElementById(recipeId);
-            const recipeClone = recipe.cloneNode(true);
-            recipeClone.removeChild(recipeClone.querySelector('button'));
-            document.getElementById('edited-recipes').appendChild(recipeClone);
-            recipe.remove();
+        const recipes = [
+            {
+                title: "Spaghetti Bolognese",
+                image: "https://bakingamoment.com/wp-content/uploads/2024/02/IMG_0203-bolognese.jpg",
+                description: "A classic Italian pasta dish with a rich meat sauce. Perfect for family dinners or special occasions."
+            },
+            {
+                title: "Chicken Curry",
+                image: "https://www.foodandwine.com/thmb/8YAIANQTZnGpVWj2XgY0dYH1V4I=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/spicy-chicken-curry-FT-RECIPE0321-58f84fdf7b484e7f86894203eb7834e7.jpg",
+                description: "A spicy and flavorful chicken curry, with a blend of aromatic spices and tender chicken pieces."
+            }
+        ];
+
+        function openModal(recipeId) {
+            const recipe = recipes[recipeId - 1]; // Get the recipe object based on the id
+            document.getElementById('modalImage').src = recipe.image;
+            document.getElementById('modalTitle').innerText = recipe.title;
+            document.getElementById('modalDescription').innerText = recipe.description;
+            document.getElementById('recipeModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+        }
+
+        // Search functionality
+        function searchRecipes() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const recipes = document.querySelectorAll('.recipe');
+
+            recipes.forEach(recipe => {
+                const title = recipe.querySelector('h3').innerText.toLowerCase();
+                const description = recipe.querySelector('p').innerText.toLowerCase();
+
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    recipe.style.display = 'block';
+                } else {
+                    recipe.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        header {
+            background-color: #ff6f61;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .recipe-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .recipe-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .recipe-card:hover {
+            transform: scale(1.05);
+        }
+
+        .recipe-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .recipe-card h3 {
+            margin: 0;
+            padding: 1rem;
+            background-color: #ff6f61;
+            color: white;
+        }
+
+        .add-recipe-form {
+            margin: 2rem;
+            padding: 1rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .add-recipe-form input, .add-recipe-form textarea, .add-recipe-form button {
+            width: 100%;
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .add-recipe-form button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-recipe-form button:hover {
+            background-color: #e55d54;
+        }
+
+        .recipe-detail {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .recipe-detail img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Recipe Website</h1>
+    </header>
+
+    <!-- Main Recipe Page -->
+    <div class="recipe-container">
+        <div class="recipe-card" onclick="showRecipe('Spaghetti')">
+            <img src="spaghetti.jpg" alt="Spaghetti">
+            <h3>Spaghetti</h3>
+        </div>
+
+        <div class="recipe-card" onclick="showRecipe('Tacos')">
+            <img src="tacos.jpg" alt="Tacos">
+            <h3>Tacos</h3>
+        </div>
+
+        <div class="recipe-card" onclick="showRecipe('Pancakes')">
+            <img src="pancakes.jpg" alt="Pancakes">
+            <h3>Pancakes</h3>
+        </div>
+    </div>
+
+    <!-- Add Recipe Form -->
+    <div class="add-recipe-form">
+        <h2>Add Your Recipe</h2>
+        <form>
+            <input type="text" id="recipe-title" placeholder="Recipe Title" required>
+            <textarea id="recipe-description" rows="5" placeholder="Recipe Description" required></textarea>
+            <input type="file" id="recipe-image" accept="image/*" required>
+            <button type="submit">Add Recipe</button>
+        </form>
+    </div>
+
+    <!-- Recipe Detail Page (hidden initially) -->
+    <div id="recipe-detail" class="recipe-detail" style="display: none;">
+        <h2 id="recipe-name"></h2>
+        <img id="recipe-img" src="" alt="">
+        <p id="recipe-description-detail"></p>
+        <button onclick="goBack()">Back to Recipes</button>
+    </div>
+
+    <script>
+        const recipes = {
+            "Spaghetti": {
+                description: "A delicious spaghetti recipe with marinara sauce.",
+                image: "spaghetti.jpg"
+            },
+            "Tacos": {
+                description: "Tacos filled with beef, cheese, and fresh vegetables.",
+                image: "tacos.jpg"
+            },
+            "Pancakes": {
+                description: "Fluffy pancakes served with syrup and butter.",
+                image: "pancakes.jpg"
+            }
+        };
+
+        function showRecipe(name) {
+            const recipe = recipes[name];
+            document.getElementById('recipe-name').innerText = name;
+            document.getElementById('recipe-img').src = recipe.image;
+            document.getElementById('recipe-description-detail').innerText = recipe.description;
+            document.querySelector('.recipe-container').style.display = 'none';
+            document.querySelector('.add-recipe-form').style.display = 'none';
+            document.getElementById('recipe-detail').style.display = 'block';
+        }
+
+        function goBack() {
+            document.querySelector('.recipe-container').style.display = 'flex';
+            document.querySelector('.add-recipe-form').style.display = 'block';
+            document.getElementById('recipe-detail').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
