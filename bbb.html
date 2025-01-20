@@ -13,17 +13,31 @@
         }
 
         header {
-            background-color: #ff6f61;
+            background-color: #DC8686;
             color: white;
             padding: 1rem;
             text-align: center;
         }
 
-        .recipe-container {
+        /* Search Bar */
+        .search-bar {
+            margin: 1rem auto;
+            padding: 0.5rem;
+            max-width: 500px;
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 1rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .recipe-container {
+            display: block;
             padding: 1rem;
         }
 
@@ -31,11 +45,13 @@
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
-            width: 300px;
+            margin-bottom: 1rem;
+            width: 80%;  /* Ensure it takes up 80% of the width */
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: transform 0.2s;
+            margin: 0.5rem auto;
         }
 
         .recipe-card:hover {
@@ -51,18 +67,19 @@
         .recipe-card h3 {
             margin: 0;
             padding: 1rem;
-            background-color: #ff6f61;
+            background-color: #E1ACAC;
             color: white;
+            text-align: center;
         }
 
         .add-recipe-form {
-            margin: 2rem;
+            margin: 2rem auto;
             padding: 1rem;
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
-            max-width: 500px;
-            margin: auto;
+            width: 80%;  /* Set width to 80% to match the recipe cards */
+            box-sizing: border-box; /* Ensures padding doesn't cause overflow */
         }
 
         .add-recipe-form input, .add-recipe-form textarea, .add-recipe-form button {
@@ -71,6 +88,7 @@
             padding: 0.8rem;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box; /* Prevents the padding from causing overflow */
         }
 
         .add-recipe-form button {
@@ -105,20 +123,25 @@
         <h1>Recipe Website</h1>
     </header>
 
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Search for a recipe..." oninput="searchRecipes()">
+    </div>
+
     <!-- Main Recipe Page -->
-    <div class="recipe-container">
+    <div class="recipe-container" id="recipe-list">
         <div class="recipe-card" onclick="showRecipe('Spaghetti')">
-            <img src="spaghetti.jpg" alt="Spaghetti">
+            <img src="https://supervalu.ie/thumbnail/800x600/var/files/real-food/recipes/Uploaded-2020/spaghetti-bolognese-recipe.jpg" alt="Spaghetti">
             <h3>Spaghetti</h3>
         </div>
 
         <div class="recipe-card" onclick="showRecipe('Tacos')">
-            <img src="tacos.jpg" alt="Tacos">
+            <img src="https://sailorbailey.com/wp-content/uploads/2023/10/Beef-Soft-TacosKey.jpg" alt="Tacos">
             <h3>Tacos</h3>
         </div>
 
         <div class="recipe-card" onclick="showRecipe('Pancakes')">
-            <img src="pancakes.jpg" alt="Pancakes">
+            <img src="https://www.inspiredtaste.net/wp-content/uploads/2016/07/Pancake-Recipe-2-1200.jpg" alt="Pancakes">
             <h3>Pancakes</h3>
         </div>
     </div>
@@ -169,9 +192,26 @@
         }
 
         function goBack() {
-            document.querySelector('.recipe-container').style.display = 'flex';
+            document.querySelector('.recipe-container').style.display = 'block';
             document.querySelector('.add-recipe-form').style.display = 'block';
             document.getElementById('recipe-detail').style.display = 'none';
+        }
+
+        function searchRecipes() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const recipeList = document.getElementById('recipe-list');
+            const recipeCards = recipeList.getElementsByClassName('recipe-card');
+
+            for (let i = 0; i < recipeCards.length; i++) {
+                const recipeCard = recipeCards[i];
+                const recipeName = recipeCard.getElementsByTagName('h3')[0].innerText.toLowerCase();
+
+                if (recipeName.includes(searchTerm)) {
+                    recipeCard.style.display = 'block';
+                } else {
+                    recipeCard.style.display = 'none';
+                }
+            }
         }
     </script>
 </body>
