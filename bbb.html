@@ -130,20 +130,7 @@
 
     <!-- Main Recipe Page -->
     <div class="recipe-container" id="recipe-list">
-        <div class="recipe-card" onclick="showRecipe('Spaghetti')">
-            <img src="https://supervalu.ie/thumbnail/800x600/var/files/real-food/recipes/Uploaded-2020/spaghetti-bolognese-recipe.jpg" alt="Spaghetti">
-            <h3>Spaghetti</h3>
-        </div>
-
-        <div class="recipe-card" onclick="showRecipe('Tacos')">
-            <img src="https://sailorbailey.com/wp-content/uploads/2023/10/Beef-Soft-TacosKey.jpg" alt="Tacos">
-            <h3>Tacos</h3>
-        </div>
-
-        <div class="recipe-card" onclick="showRecipe('Pancakes')">
-            <img src="https://www.inspiredtaste.net/wp-content/uploads/2016/07/Pancake-Recipe-2-1200.jpg" alt="Pancakes">
-            <h3>Pancakes</h3>
-        </div>
+        <!-- Recipe cards will be dynamically added here -->
     </div>
 
     <!-- Add Recipe Form -->
@@ -152,7 +139,7 @@
         <form>
             <input type="text" id="recipe-title" placeholder="Recipe Title" required>
             <textarea id="recipe-description" rows="5" placeholder="Recipe Description" required></textarea>
-            <input type="file" id="recipe-image" accept="image/*" required>
+            <input type="text" id="recipe-image" placeholder="Image Url" required>
             <button type="submit">Add Recipe</button>
         </form>
     </div>
@@ -165,38 +152,83 @@
         <button onclick="goBack()">Back to Recipes</button>
     </div>
 
-    <script>
-        const recipes = {
-            "Spaghetti": {
-                description: "A delicious spaghetti recipe with marinara sauce.",
-                image: "spaghetti.jpg"
-            },
-            "Tacos": {
-                description: "Tacos filled with beef, cheese, and fresh vegetables.",
-                image: "tacos.jpg"
-            },
-            "Pancakes": {
-                description: "Fluffy pancakes served with syrup and butter.",
-                image: "pancakes.jpg"
-            }
+    <script type="module">
+        // Import Firebase services
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, addDoc, query, where } from 'https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyABc4Qh46cvOqnNoLtWtgZwamC566mb9wc",
+            authDomain: "web-testing-88020.firebaseapp.com",
+            projectId: "web-testing-88020",
+            storageBucket: "web-testing-88020.firebasestorage.app",
+            messagingSenderId: "657319465895",
+            appId: "1:657319465895:web:ced838b83dc21958645c82",
+            measurementId: "G-QZ5G26QT2B"
         };
 
-        function showRecipe(name) {
-            const recipe = recipes[name];
-            document.getElementById('recipe-name').innerText = name;
-            document.getElementById('recipe-img').src = recipe.image;
-            document.getElementById('recipe-description-detail').innerText = recipe.description;
-            document.querySelector('.recipe-container').style.display = 'none';
-            document.querySelector('.add-recipe-form').style.display = 'none';
-            document.getElementById('recipe-detail').style.display = 'block';
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Load recipes from Firestore
+        async function loadRecipes() {
+            const querySnapshot = await getDocs(collection(db, "recipes"));
+            querySnapshot.forEach((doc) => {
+                const recipe = doc.data();
+                const recipeName = recipe.title;
+                const recipeDescription = recipe.description;
+                const recipeImageURL = recipe.imageURL;
+
+                // Create recipe card dynamically
+                const recipeContainer = document.getElementById("recipe-list");
+                const recipeCard = document.createElement("div");
+                recipeCard.classList.add("recipe-card");
+                recipeCard.onclick = () => showRecipe(recipeName); // Show recipe when clicked
+
+                // Image
+                const recipeImg = document.createElement("img");
+                recipeImg.src = recipeImageURL;
+                recipeCard.appendChild(recipeImg);
+
+                // Title
+                const recipeTitle = document.createElement("h3");
+                recipeTitle.innerText = recipeName;
+                recipeCard.appendChild(recipeTitle);
+
+                // Append the new recipe card to the recipe container
+                recipeContainer.appendChild(recipeCard);
+            });
         }
 
+        // Call this function when your page loads
+        window.onload = loadRecipes;
+
+        // Show recipe details
+        async function showRecipe(name) {
+            const q = query(collection(db, "recipes"), where("title", "==", name));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                const recipe = doc.data();
+                document.getElementById('recipe-name').innerText = recipe.title;
+                document.getElementById('recipe-img').src = recipe.imageURL;
+                document.getElementById('recipe-description-detail').innerText = recipe.description;
+                document.querySelector('.recipe-container').style.display = 'none';
+                document.querySelector('.add-recipe-form').style.display = 'none';
+                document.getElementById('recipe-detail').style.display = 'block';
+            });
+        }
+
+        // Go back to the recipe list
         function goBack() {
             document.querySelector('.recipe-container').style.display = 'block';
             document.querySelector('.add-recipe-form').style.display = 'block';
             document.getElementById('recipe-detail').style.display = 'none';
         }
+        window.goBack = goBack
 
+        // Search recipes
         function searchRecipes() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const recipeList = document.getElementById('recipe-list');
@@ -213,6 +245,32 @@
                 }
             }
         }
+
+        // Add a new recipe to Firestore and Firebase Storage
+        async function addRecipe(event) {
+            event.preventDefault();
+
+            // Get form data
+            const title = document.getElementById("recipe-title").value;
+            const description = document.getElementById("recipe-description").value;
+            const imageUrl = document.getElementById("recipe-image").value;
+
+            // Add recipe to Firestore
+            await addDoc(collection(db, "recipes"), {
+                title: title,
+                description: description,
+                imageURL: imageUrl
+            });
+
+            // Reload the recipes list
+            loadRecipes();
+
+            // Reset form
+            document.querySelector(".add-recipe-form form").reset();
+        }
+
+        // Attach form submission event to the add recipe function
+        document.querySelector(".add-recipe-form form").addEventListener("submit", addRecipe);
     </script>
 </body>
 </html>
