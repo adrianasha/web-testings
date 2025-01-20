@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f4f4f4;
+          margin: 0;
+          padding: 0;
+      }
+      
+      .container {
+          width: 80%;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      h1 {
+          text-align: center;
+          color: #333;
+      }
+      
+      .section {
+          margin-bottom: 40px;
+      }
+      
+      h2 {
+          color: #555;
+          border-bottom: 2px solid #ddd;
+          padding-bottom: 10px;
+      }
+      
+      #recipe-list, #edited-recipes {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+      }
+      
+      .recipe {
+          background-color: #fafafa;
+          padding: 20px;
+          border: 1px solid #ddd;
+          width: calc(50% - 20px);
+          box-sizing: border-box;
+      }
+      
+      .recipe h3 {
+          margin-top: 0;
+      }
+      
+      .recipe p {
+          color: #666;
+      }
+      
+      button {
+          background-color: #3498db;
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          cursor: pointer;
+          border-radius: 5px;
+      }
+      
+      button:hover {
+          background-color: #2980b9;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recipe Website</h1>
+        
+        <div class="section">
+            <h2>Recipes</h2>
+            <div id="recipe-list">
+                <div class="recipe" id="recipe-1">
+                    <h3>Spaghetti Bolognese</h3>
+                    <p>A classic Italian pasta dish with rich meat sauce.</p>
+                    <button onclick="editRecipe('recipe-1')">Edit</button>
+                </div>
+                <div class="recipe" id="recipe-2">
+                    <h3>Chicken Curry</h3>
+                    <p>A spicy and flavorful chicken curry.</p>
+                    <button onclick="editRecipe('recipe-2')">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Edited Recipes</h2>
+            <div id="edited-recipes">
+                <!-- Edited recipes will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editRecipe(recipeId) {
+            const recipe = document.getElementById(recipeId);
+            const recipeClone = recipe.cloneNode(true);
+            recipeClone.removeChild(recipeClone.querySelector('button'));
+            document.getElementById('edited-recipes').appendChild(recipeClone);
+            recipe.remove();
+        }
+    </script>
+</body>
+</html>
